@@ -60,19 +60,19 @@ const saveIngredients = () => {
 // Ajouter de nouveaux ingrédients à la liste si ils n'existent pas
 const addNewIngredients = (cocktailIngredients) => {
   let hasNewIngredients = false
-  
+
   cocktailIngredients.forEach(cocktailIngredient => {
     const ingredientName = cocktailIngredient.ingredient.toLowerCase().trim()
-    const exists = ingredients.value.some(ingredient => 
+    const exists = ingredients.value.some(ingredient =>
       ingredient.toLowerCase() === ingredientName
     )
-    
+
     if (!exists && ingredientName) {
       ingredients.value.push(cocktailIngredient.ingredient.trim())
       hasNewIngredients = true
     }
   })
-  
+
   if (hasNewIngredients) {
     // Trier les ingrédients par ordre alphabétique
     ingredients.value.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
@@ -341,12 +341,12 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
         </v-row>
 
         <!-- Message si aucun résultat -->
-        <div v-if="filteredCocktails.length === 0" class="text-center mt-8">
-          <v-icon size="64" color="grey-lighten-1" :icon="mdiEmoticonSad"></v-icon>
-          <h3 class="text-h5 mt-4 text-grey-darken-1">
+        <div v-if="filteredCocktails.length === 0" class="text-center mt-8 mb-16">
+          <v-icon size="64" color="white" :icon="mdiEmoticonSad"></v-icon>
+          <h3 class="text-h5 mt-4 ">
             Aucun cocktail ne correspond à vos critères
           </h3>
-          <p class="text-body-1 text-grey-darken-1 mt-2">
+          <p class="text-body-1  mt-2">
             Essayez de modifier vos filtres pour découvrir de nouvelles recettes !
           </p>
         </div>
