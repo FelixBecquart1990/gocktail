@@ -1,24 +1,154 @@
 <script setup>
-import { ref, computed } from 'vue'
-import cocktails from '@/data/cocktails.json'
-import ingredients from '@/data/ingredients.json'
-import { mdiPlus, mdiCircleOutline, mdiCircle, mdiMagnify, mdiEmoticonSad } from '@mdi/js'
+import { ref, computed, onMounted } from 'vue'
+import cocktailsData from '@/data/cocktails.json'
+import ingredientsData from '@/data/ingredients.json'
+import { mdiPlus, mdiCircleOutline, mdiCircle, mdiMagnify, mdiEmoticonSad, mdiClose } from '@mdi/js'
 
-// État réactif pour les filtres
+// État réactif pour les cocktails, ingrédients et filtres
+const cocktails = ref([])
+const ingredients = ref([])
 const selectedIngredients = ref([])
 const sournessRange = ref([0, 5])
 const bitternessRange = ref([0, 5])
 const sweetnessRange = ref([0, 5])
 const onlyMocktails = ref(false)
 
+// État pour le dialogue d'ajout
+const showAddDialog = ref(false)
+const newCocktail = ref({
+  name: '',
+  emoji: '🍻',
+  ingredients: [{ ingredient: '', amount_ml: 0 }],
+  sourness: 0,
+  bitterness: 0,
+  sweetness: 0,
+  mocktail: false
+})
+
+// Charger les cocktails depuis localStorage ou utiliser les données par défaut
+const loadCocktails = () => {
+  const savedCocktails = localStorage.getItem('gocktail-cocktails')
+  if (savedCocktails) {
+    cocktails.value = JSON.parse(savedCocktails)
+  } else {
+    cocktails.value = [...cocktailsData]
+    saveCocktails()
+  }
+}
+
+// Charger les ingrédients depuis localStorage ou utiliser les données par défaut
+const loadIngredients = () => {
+  const savedIngredients = localStorage.getItem('gocktail-ingredients')
+  if (savedIngredients) {
+    ingredients.value = JSON.parse(savedIngredients)
+  } else {
+    ingredients.value = [...ingredientsData]
+    saveIngredients()
+  }
+}
+
+// Sauvegarder les cocktails dans localStorage
+const saveCocktails = () => {
+  localStorage.setItem('gocktail-cocktails', JSON.stringify(cocktails.value))
+}
+
+// Sauvegarder les ingrédients dans localStorage
+const saveIngredients = () => {
+  localStorage.setItem('gocktail-ingredients', JSON.stringify(ingredients.value))
+}
+
+// Ajouter de nouveaux ingrédients à la liste si ils n'existent pas
+const addNewIngredients = (cocktailIngredients) => {
+  let hasNewIngredients = false
+  
+  cocktailIngredients.forEach(cocktailIngredient => {
+    const ingredientName = cocktailIngredient.ingredient.toLowerCase().trim()
+    const exists = ingredients.value.some(ingredient => 
+      ingredient.toLowerCase() === ingredientName
+    )
+    
+    if (!exists && ingredientName) {
+      ingredients.value.push(cocktailIngredient.ingredient.trim())
+      hasNewIngredients = true
+    }
+  })
+  
+  if (hasNewIngredients) {
+    // Trier les ingrédients par ordre alphabétique
+    ingredients.value.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    saveIngredients()
+  }
+}
+
+// Ajouter un nouvel ingrédient à la recette
+const addIngredient = () => {
+  newCocktail.value.ingredients.push({ ingredient: '', amount_ml: 0 })
+}
+
+// Supprimer un ingrédient de la recette
+const removeIngredient = (index) => {
+  if (newCocktail.value.ingredients.length > 1) {
+    newCocktail.value.ingredients.splice(index, 1)
+  }
+}
+
+// Sauvegarder le nouveau cocktail
+const saveCocktail = () => {
+  // Valider que tous les champs sont remplis
+  if (!newCocktail.value.name.trim()) return
+
+  const validIngredients = newCocktail.value.ingredients.filter(
+    ing => ing.ingredient.trim() && ing.amount_ml > 0
+  )
+
+  if (validIngredients.length === 0) return
+
+  // Ajouter les nouveaux ingrédients à la liste globale
+  addNewIngredients(validIngredients)
+
+  // Créer le nouveau cocktail
+  const cocktailToAdd = {
+    ...newCocktail.value,
+    name: newCocktail.value.name.trim(),
+    ingredients: validIngredients
+  }
+
+  // Ajouter à la liste
+  cocktails.value.push(cocktailToAdd)
+  saveCocktails()
+
+  // Réinitialiser le formulaire
+  resetForm()
+  showAddDialog.value = false
+}
+
+// Réinitialiser le formulaire
+const resetForm = () => {
+  newCocktail.value = {
+    name: '',
+    emoji: '🍻',
+    ingredients: [{ ingredient: '', amount_ml: 0 }],
+    sourness: 0,
+    bitterness: 0,
+    sweetness: 0,
+    mocktail: false
+  }
+}
+
+// Initialiser au montage du composant
+onMounted(() => {
+  loadCocktails()
+  loadIngredients()
+})
+
 // Cocktails filtrés
 const filteredCocktails = computed(() => {
-  return cocktails.filter(cocktail => {
+  return cocktails.value.filter(cocktail => {
     // Filtre ingrédients
     if (selectedIngredients.value.length > 0) {
       const hasSelectedIngredients = selectedIngredients.value.every(ingredient =>
         cocktail.ingredients.some(cocktailIngredient =>
-          cocktailIngredient.toLowerCase().includes(ingredient.toLowerCase())
+          cocktailIngredient.ingredient.toLowerCase().includes(ingredient.toLowerCase())
         )
       )
       if (!hasSelectedIngredients) return false
@@ -222,6 +352,115 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
         </div>
       </div>
     </v-container>
+
+    <!-- Floating Action Button -->
+    <v-fab :icon="mdiPlus" location="bottom end" size="large" color="primary" @click="showAddDialog = true"
+      class="fab-button rounded-circle"></v-fab>
+
+    <!-- Dialog pour ajouter un cocktail -->
+    <v-dialog v-model="showAddDialog" max-width="600px" persistent>
+      <v-card class="glass-card">
+        <v-card-title class="text-h5 text-center pb-2">
+          <v-icon :icon="mdiPlus" class="mr-2"></v-icon>
+          Ajouter un nouveau cocktail
+        </v-card-title>
+
+        <v-card-text>
+          <v-form>
+            <v-row>
+              <!-- Nom du cocktail -->
+              <v-col cols="12" md="8">
+                <v-text-field v-model="newCocktail.name" label="Nom du cocktail" variant="outlined" class="glass-input"
+                  hide-details required></v-text-field>
+              </v-col>
+
+              <!-- Emoji -->
+              <v-col cols="12" md="4">
+                <v-text-field v-model="newCocktail.emoji" label="Emoji" variant="outlined" class="glass-input"
+                  hide-details maxlength="2"></v-text-field>
+              </v-col>
+
+              <!-- Switch mocktail -->
+              <v-col cols="12">
+                <v-switch v-model="newCocktail.mocktail" label="🚫 Sans alcool (mocktail)" color="primary"
+                  hide-details></v-switch>
+              </v-col>
+
+              <!-- Ingrédients -->
+              <v-col cols="12">
+                <h4 class="recipe-title mb-3">📝 Ingrédients</h4>
+                <div v-for="(ingredient, index) in newCocktail.ingredients" :key="index" class="ingredient-row mb-3">
+                  <v-row>
+                    <v-col cols="12" md="8">
+                      <v-text-field v-model="ingredient.ingredient" label="Ingrédient" variant="outlined"
+                        class="glass-input" hide-details required></v-text-field>
+                    </v-col>
+                    <v-col cols="10" md="3">
+                      <v-text-field v-model="ingredient.amount_ml" label="Quantité (ml)" type="number"
+                        variant="outlined" class="glass-input" hide-details required></v-text-field>
+                    </v-col>
+                    <v-col cols="2" md="1" class="d-flex align-center">
+                      <v-btn v-if="newCocktail.ingredients.length > 1" :icon="mdiClose" size="small" color="error"
+                        variant="text" @click="removeIngredient(index)"></v-btn>
+                    </v-col>
+                  </v-row>
+                </div>
+                <v-btn @click="addIngredient" color="primary" variant="outlined" size="small" class="mb-4">
+                  <v-icon :icon="mdiPlus" class="mr-1"></v-icon>
+                  Ajouter un ingrédient
+                </v-btn>
+              </v-col>
+
+              <!-- Caractéristiques gustatives -->
+              <v-col cols="12">
+                <h4 class="recipe-title mb-3">🎯 Profil gustatif</h4>
+
+                <!-- Acidité -->
+                <div class="mb-4">
+                  <div class="slider-container">
+                    🍋
+                    <span class="slider-label ml-1">Acidité: {{ newCocktail.sourness }}</span>
+                  </div>
+                  <v-slider v-model="newCocktail.sourness" :min="0" :max="5" step="1" thumb-label
+                    color="yellow-darken-2" track-color="yellow-lighten-4" class="glass-slider" hide-details></v-slider>
+                </div>
+
+                <!-- Amertume -->
+                <div class="mb-4">
+                  <div class="slider-container">
+                    ☕
+                    <span class="slider-label ml-1">Amertume: {{ newCocktail.bitterness }}</span>
+                  </div>
+                  <v-slider v-model="newCocktail.bitterness" :min="0" :max="5" step="1" thumb-label
+                    color="brown-darken-2" track-color="brown-lighten-4" class="glass-slider" hide-details></v-slider>
+                </div>
+
+                <!-- Douceur -->
+                <div class="mb-4">
+                  <div class="slider-container">
+                    🍯
+                    <span class="slider-label ml-1">Douceur: {{ newCocktail.sweetness }}</span>
+                  </div>
+                  <v-slider v-model="newCocktail.sweetness" :min="0" :max="5" step="1" thumb-label color="pink-darken-2"
+                    track-color="pink-lighten-4" class="glass-slider" hide-details></v-slider>
+                </div>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions class="pa-4">
+          <v-spacer></v-spacer>
+          <v-btn color="grey" variant="outlined" @click="showAddDialog = false; resetForm()">
+            Annuler
+          </v-btn>
+          <v-btn color="primary" variant="elevated" @click="saveCocktail"
+            :disabled="!newCocktail.name.trim() || newCocktail.ingredients.every(ing => !ing.ingredient.trim() || ing.amount_ml <= 0)">
+            Ajouter
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -478,5 +717,65 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
   color: white !important;
   font-weight: 500;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Floating Action Button */
+.fab-button {
+  position: fixed !important;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  backdrop-filter: blur(10px);
+}
+
+.fab-button:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* Dialog styles */
+:deep(.v-dialog .v-card) {
+  backdrop-filter: blur(20px) !important;
+}
+
+.ingredient-row {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Amélioration des inputs dans le dialog */
+:deep(.v-dialog .glass-input .v-field) {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 15px;
+}
+
+:deep(.v-dialog .glass-input .v-field-label) {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+:deep(.v-dialog .glass-input .v-field__input) {
+  color: white !important;
+}
+
+/* Amélioration des sliders dans le dialog */
+:deep(.v-dialog .glass-slider) {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile adjustments for FAB */
+@media (max-width: 768px) {
+  .fab-button {
+    bottom: 16px;
+    right: 16px;
+  }
 }
 </style>
