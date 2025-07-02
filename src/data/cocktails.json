@@ -1,0 +1,193 @@
+[
+  {
+    "name": "Mojito",
+    "ingredients": [
+      "rhum blanc",
+      "menthe",
+      "citron vert",
+      "sucre",
+      "eau gazeuse"
+    ],
+    "sourness": 2,
+    "bitterness": 1,
+    "sweetness": 3,
+    "mocktail": false
+  },
+  {
+    "name": "Negroni",
+    "ingredients": [
+      "gin",
+      "campari",
+      "vermouth rouge"
+    ],
+    "sourness": 0,
+    "bitterness": 5,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Whiskey Sour",
+    "ingredients": [
+      "whiskey",
+      "jus de citron",
+      "sirop de sucre",
+      "blanc d'œuf (optionnel)"
+    ],
+    "sourness": 4,
+    "bitterness": 1,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Daiquiri",
+    "ingredients": [
+      "rhum blanc",
+      "jus de citron vert",
+      "sirop de sucre"
+    ],
+    "sourness": 4,
+    "bitterness": 0,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Caipirinha",
+    "ingredients": [
+      "cachaça",
+      "citron vert",
+      "sucre"
+    ],
+    "sourness": 3,
+    "bitterness": 1,
+    "sweetness": 3,
+    "mocktail": false
+  },
+  {
+    "name": "Cosmopolitan",
+    "ingredients": [
+      "vodka",
+      "triple sec",
+      "jus de cranberry",
+      "jus de citron vert"
+    ],
+    "sourness": 3,
+    "bitterness": 1,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Mai Tai",
+    "ingredients": [
+      "rhum ambré",
+      "rhum blanc",
+      "jus de citron vert",
+      "orgeat",
+      "curaçao orange"
+    ],
+    "sourness": 3,
+    "bitterness": 1,
+    "sweetness": 3,
+    "mocktail": false
+  },
+  {
+    "name": "Pina Colada",
+    "ingredients": [
+      "rhum blanc",
+      "jus d'ananas",
+      "crème de coco"
+    ],
+    "sourness": 1,
+    "bitterness": 0,
+    "sweetness": 5,
+    "mocktail": false
+  },
+  {
+    "name": "Americano",
+    "ingredients": [
+      "campari",
+      "vermouth rouge",
+      "eau gazeuse"
+    ],
+    "sourness": 0,
+    "bitterness": 4,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Margarita",
+    "ingredients": [
+      "tequila",
+      "triple sec",
+      "jus de citron vert"
+    ],
+    "sourness": 4,
+    "bitterness": 1,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Espresso Martini",
+    "ingredients": [
+      "vodka",
+      "liqueur de café",
+      "espresso"
+    ],
+    "sourness": 0,
+    "bitterness": 3,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Tom Collins",
+    "ingredients": [
+      "gin",
+      "jus de citron",
+      "sirop de sucre",
+      "eau gazeuse"
+    ],
+    "sourness": 4,
+    "bitterness": 0,
+    "sweetness": 2,
+    "mocktail": false
+  },
+  {
+    "name": "Bloody Mary",
+    "ingredients": [
+      "vodka",
+      "jus de tomate",
+      "jus de citron",
+      "tabasco",
+      "sauce Worcestershire",
+      "poivre"
+    ],
+    "sourness": 2,
+    "bitterness": 1,
+    "sweetness": 1,
+    "mocktail": false
+  },
+  {
+    "name": "Virgin Mojito",
+    "ingredients": [
+      "menthe",
+      "citron vert",
+      "sucre",
+      "eau gazeuse"
+    ],
+    "sourness": 2,
+    "bitterness": 0,
+    "sweetness": 3,
+    "mocktail": true
+  },
+  {
+    "name": "Gin Tonic",
+    "ingredients": [
+      "gin",
+      "tonic",
+      "citron ou concombre (optionnel)"
+    ],
+    "sourness": 1,
+    "bitterness": 3,
+    "sweetness": 1,
+    "mocktail": false
+  }
+]

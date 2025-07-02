@@ -1,0 +1,506 @@
+<script setup>
+import { ref, computed } from 'vue'
+import cocktails from '@/data/cocktails.json'
+import ingredients from '@/data/ingredients.json'
+
+// État réactif pour les filtres
+const selectedIngredients = ref([])
+const sournessRange = ref([0, 5])
+const bitternessRange = ref([0, 5])
+const sweetnessRange = ref([0, 5])
+const onlyMocktails = ref(false)
+
+// Cocktails filtrés
+const filteredCocktails = computed(() => {
+  return cocktails.filter(cocktail => {
+    // Filtre ingrédients
+    if (selectedIngredients.value.length > 0) {
+      const hasSelectedIngredients = selectedIngredients.value.every(ingredient => 
+        cocktail.ingredients.some(cocktailIngredient => 
+          cocktailIngredient.toLowerCase().includes(ingredient.toLowerCase())
+        )
+      )
+      if (!hasSelectedIngredients) return false
+    }
+    
+    // Filtre sourness
+    if (cocktail.sourness < sournessRange.value[0] || cocktail.sourness > sournessRange.value[1]) {
+      return false
+    }
+    
+    // Filtre bitterness
+    if (cocktail.bitterness < bitternessRange.value[0] || cocktail.bitterness > bitternessRange.value[1]) {
+      return false
+    }
+    
+    // Filtre sweetness
+    if (cocktail.sweetness < sweetnessRange.value[0] || cocktail.sweetness > sweetnessRange.value[1]) {
+      return false
+    }
+    
+    // Filtre mocktail
+    if (onlyMocktails.value && !cocktail.mocktail) {
+      return false
+    }
+    
+    return true
+  })
+})
+
+// Fonction pour obtenir l'emoji approprié pour chaque cocktail
+const getCocktailEmoji = (cocktail) => {
+  if (cocktail.mocktail) return '🥤'
+  if (cocktail.name.toLowerCase().includes('martini')) return '🍸'
+  if (cocktail.name.toLowerCase().includes('mojito')) return '🌿'
+  if (cocktail.name.toLowerCase().includes('margarita')) return '🍹'
+  if (cocktail.name.toLowerCase().includes('bloody mary')) return '🍅'
+  if (cocktail.name.toLowerCase().includes('pina colada')) return '🥥'
+  if (cocktail.name.toLowerCase().includes('whiskey')) return '🥃'
+  return '🍻'
+}
+
+// Fonction pour obtenir la couleur basée sur les caractéristiques
+const getFlavorColor = (sourness, bitterness, sweetness) => {
+  if (sweetness >= 4) return '#FF6B9D'
+  if (bitterness >= 4) return '#8B4513'
+  if (sourness >= 4) return '#FFD700'
+  return '#4FC3F7'
+}
+</script>
+
+<template>
+  <div class="cocktail-app">
+    <!-- Header avec titre -->
+    <div class="app-header">
+      <h1 class="app-title">
+        🍸 Gocktail 🍹
+      </h1>
+      <p class="app-subtitle">Découvrez votre cocktail parfait</p>
+    </div>
+
+    <v-container fluid class="pa-4">
+      <!-- Panneau de filtres avec style glassmorphism -->
+      <v-card class="glass-card mb-6" elevation="0">
+        <v-card-title class="text-h5 text-center pb-2">
+          🔍 Filtres de recherche
+        </v-card-title>
+        
+        <v-card-text>
+          <v-row>
+            <!-- Sélection d'ingrédients -->
+            <v-col cols="12" md="6">
+              <v-select
+                v-model="selectedIngredients"
+                :items="ingredients"
+                label="🧪 Ingrédients"
+                multiple
+                chips
+                closable-chips
+                variant="outlined"
+                class="glass-input"
+              >
+                <template v-slot:prepend-item>
+                  <v-list-item>
+                    <v-list-item-title class="text-caption">
+                      Sélectionnez les ingrédients que vous avez
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                </template>
+              </v-select>
+            </v-col>
+
+            <!-- Switch mocktail -->
+            <v-col cols="12" md="6" class="d-flex align-center">
+              <v-switch
+                v-model="onlyMocktails"
+                label="🚫 Seulement les mocktails"
+                color="primary"
+                hide-details
+              ></v-switch>
+            </v-col>
+          </v-row>
+
+          <v-row class="mt-2">
+            <!-- Slider Acidité -->
+            <v-col cols="12" md="4">
+              <div class="slider-container">
+                <v-icon class="mr-2">🍋</v-icon>
+                <span class="slider-label">Acidité</span>
+              </div>
+              <v-range-slider
+                v-model="sournessRange"
+                :min="0"
+                :max="5"
+                step="1"
+                thumb-label
+                color="yellow-darken-2"
+                track-color="yellow-lighten-4"
+                class="glass-slider"
+              >
+                <template v-slot:thumb-label="{ modelValue }">
+                  {{ modelValue }}
+                </template>
+              </v-range-slider>
+            </v-col>
+
+            <!-- Slider Amertume -->
+            <v-col cols="12" md="4">
+              <div class="slider-container">
+                <v-icon class="mr-2">☕</v-icon>
+                <span class="slider-label">Amertume</span>
+              </div>
+              <v-range-slider
+                v-model="bitternessRange"
+                :min="0"
+                :max="5"
+                step="1"
+                thumb-label
+                color="brown-darken-2"
+                track-color="brown-lighten-4"
+                class="glass-slider"
+              >
+                <template v-slot:thumb-label="{ modelValue }">
+                  {{ modelValue }}
+                </template>
+              </v-range-slider>
+            </v-col>
+
+            <!-- Slider Douceur -->
+            <v-col cols="12" md="4">
+              <div class="slider-container">
+                <v-icon class="mr-2">🍯</v-icon>
+                <span class="slider-label">Douceur</span>
+              </div>
+              <v-range-slider
+                v-model="sweetnessRange"
+                :min="0"
+                :max="5"
+                step="1"
+                thumb-label
+                color="pink-darken-2"
+                track-color="pink-lighten-4"
+                class="glass-slider"
+              >
+                <template v-slot:thumb-label="{ modelValue }">
+                  {{ modelValue }}
+                </template>
+              </v-range-slider>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <h2 class="text-h4 mb-4 text-center">
+          🎯 {{ filteredCocktails.length }} cocktail{{ filteredCocktails.length > 1 ? 's' : '' }} trouvé{{ filteredCocktails.length > 1 ? 's' : '' }}
+        </h2>
+
+        <v-row>
+          <v-col
+            v-for="cocktail in filteredCocktails"
+            :key="cocktail.name"
+            cols="12"
+            sm="6"
+            md="4"
+            lg="3"
+          >
+            <v-card 
+              class="glass-card cocktail-card"
+              elevation="0"
+              :style="{ borderColor: getFlavorColor(cocktail.sourness, cocktail.bitterness, cocktail.sweetness) }"
+            >
+              <v-card-title class="text-center pb-2">
+                <div class="cocktail-emoji">{{ getCocktailEmoji(cocktail) }}</div>
+                <div class="cocktail-name">{{ cocktail.name }}</div>
+                <v-chip 
+                  v-if="cocktail.mocktail" 
+                  color="success" 
+                  size="small"
+                  class="mt-1"
+                >
+                  🚫 Sans alcool
+                </v-chip>
+              </v-card-title>
+
+              <v-card-text>
+                <!-- Ingrédients -->
+                <div class="mb-3">
+                  <v-chip
+                    v-for="ingredient in cocktail.ingredients"
+                    :key="ingredient"
+                    size="small"
+                    class="ma-1"
+                    variant="outlined"
+                  >
+                    {{ ingredient }}
+                  </v-chip>
+                </div>
+
+                <!-- Caractéristiques gustatives -->
+                <div class="flavor-profile">
+                  <div class="flavor-item">
+                    <span class="flavor-icon">🍋</span>
+                    <span class="flavor-label">Acidité:</span>
+                    <v-rating
+                      :model-value="cocktail.sourness"
+                      readonly
+                      size="small"
+                      color="yellow-darken-2"
+                      empty-icon="mdi-circle-outline"
+                      full-icon="mdi-circle"
+                    ></v-rating>
+                  </div>
+
+                  <div class="flavor-item">
+                    <span class="flavor-icon">☕</span>
+                    <span class="flavor-label">Amertume:</span>
+                    <v-rating
+                      :model-value="cocktail.bitterness"
+                      readonly
+                      size="small"
+                      color="brown-darken-2"
+                      empty-icon="mdi-circle-outline"
+                      full-icon="mdi-circle"
+                    ></v-rating>
+                  </div>
+
+                  <div class="flavor-item">
+                    <span class="flavor-icon">🍯</span>
+                    <span class="flavor-label">Douceur:</span>
+                    <v-rating
+                      :model-value="cocktail.sweetness"
+                      readonly
+                      size="small"
+                      color="pink-darken-2"
+                      empty-icon="mdi-circle-outline"
+                      full-icon="mdi-circle"
+                    ></v-rating>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- Message si aucun résultat -->
+        <div v-if="filteredCocktails.length === 0" class="text-center mt-8">
+          <v-icon size="64" color="grey-lighten-1">😔</v-icon>
+          <h3 class="text-h5 mt-4 text-grey-darken-1">
+            Aucun cocktail ne correspond à vos critères
+          </h3>
+          <p class="text-body-1 text-grey-darken-1 mt-2">
+            Essayez de modifier vos filtres pour découvrir de nouvelles recettes !
+          </p>
+        </div>
+      </div>
+    </v-container>
+  </div>
+</template>
+
+<style scoped>
+.cocktail-app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+}
+
+.cocktail-app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="20" cy="80" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+  z-index: 1;
+}
+
+.app-header {
+  text-align: center;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.app-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.app-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0.5rem 0 0 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.cocktail-card {
+  border-left: 4px solid;
+  height: 100%;
+}
+
+.cocktail-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.cocktail-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.glass-input :deep(.v-field) {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.slider-label {
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.glass-slider {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.flavor-profile {
+  margin-top: 1rem;
+}
+
+.flavor-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+
+.flavor-icon {
+  font-size: 1.1rem;
+  width: 24px;
+}
+
+.flavor-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  min-width: 70px;
+}
+
+.results-section {
+  position: relative;
+  z-index: 2;
+}
+
+.results-section h2 {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 2.5rem;
+  }
+  
+  .cocktail-emoji {
+    font-size: 2.5rem;
+  }
+  
+  .flavor-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .flavor-label {
+    min-width: auto;
+  }
+}
+
+/* Animation pour les cartes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cocktail-card {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Amélioration des chips */
+:deep(.v-chip) {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px);
+}
+
+:deep(.v-chip--variant-outlined) {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Style pour les ratings */
+:deep(.v-rating .v-icon) {
+  margin: 0 1px;
+}
+
+/* Amélioration du switch */
+:deep(.v-switch) {
+  color: white;
+}
+
+:deep(.v-switch .v-label) {
+  color: white !important;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+</style>
