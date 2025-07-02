@@ -108,11 +108,11 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
             <!-- Slider Acidité -->
             <v-col cols="12" md="4">
               <div class="slider-container">
-                <v-icon class="mr-2">🍋</v-icon>
-                <span class="slider-label">Acidité</span>
+                🍋
+                <span class="slider-label ml-1">Acidité</span>
               </div>
-              <v-range-slider v-model="sournessRange" :min="0" :max="5" step="1" thumb-label color="yellow-darken-2"
-                track-color="yellow-lighten-4" class="glass-slider">
+              <v-range-slider hide-details v-model="sournessRange" :min="0" :max="5" step="1" thumb-label
+                color="yellow-darken-2" track-color="yellow-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
@@ -122,11 +122,11 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
             <!-- Slider Amertume -->
             <v-col cols="12" md="4">
               <div class="slider-container">
-                <v-icon class="mr-2">☕</v-icon>
-                <span class="slider-label">Amertume</span>
+                ☕
+                <span class="slider-label ml-1">Amertume</span>
               </div>
-              <v-range-slider v-model="bitternessRange" :min="0" :max="5" step="1" thumb-label color="brown-darken-2"
-                track-color="brown-lighten-4" class="glass-slider">
+              <v-range-slider hide-details v-model="bitternessRange" :min="0" :max="5" step="1" thumb-label
+                color="brown-darken-2" track-color="brown-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
@@ -136,11 +136,11 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
             <!-- Slider Douceur -->
             <v-col cols="12" md="4">
               <div class="slider-container">
-                <v-icon class="mr-2">🍯</v-icon>
-                <span class="slider-label">Douceur</span>
+                🍯
+                <span class="slider-label ml-1">Douceur</span>
               </div>
-              <v-range-slider v-model="sweetnessRange" :min="0" :max="5" step="1" thumb-label color="pink-darken-2"
-                track-color="pink-lighten-4" class="glass-slider">
+              <v-range-slider hide-details v-model="sweetnessRange" :min="0" :max="5" step="1" thumb-label
+                color="pink-darken-2" track-color="pink-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
