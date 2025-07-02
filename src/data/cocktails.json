@@ -1,12 +1,28 @@
 [
   {
     "name": "Mojito",
+    "emoji": "🌿",
     "ingredients": [
-      "rhum blanc",
-      "menthe",
-      "citron vert",
-      "sucre",
-      "eau gazeuse"
+      {
+        "ingredient": "rhum blanc",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "menthe",
+        "amount_ml": 10
+      },
+      {
+        "ingredient": "citron vert",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sucre",
+        "amount_ml": 10
+      },
+      {
+        "ingredient": "eau gazeuse",
+        "amount_ml": 100
+      }
     ],
     "sourness": 2,
     "bitterness": 1,
@@ -15,10 +31,20 @@
   },
   {
     "name": "Negroni",
+    "emoji": "🟥",
     "ingredients": [
-      "gin",
-      "campari",
-      "vermouth rouge"
+      {
+        "ingredient": "gin",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "campari",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "vermouth rouge",
+        "amount_ml": 30
+      }
     ],
     "sourness": 0,
     "bitterness": 5,
@@ -27,11 +53,24 @@
   },
   {
     "name": "Whiskey Sour",
+    "emoji": "🥃",
     "ingredients": [
-      "whiskey",
-      "jus de citron",
-      "sirop de sucre",
-      "blanc d'œuf (optionnel)"
+      {
+        "ingredient": "whiskey",
+        "amount_ml": 60
+      },
+      {
+        "ingredient": "jus de citron",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sirop de sucre",
+        "amount_ml": 15
+      },
+      {
+        "ingredient": "blanc d'œuf",
+        "amount_ml": 15
+      }
     ],
     "sourness": 4,
     "bitterness": 1,
@@ -40,10 +79,20 @@
   },
   {
     "name": "Daiquiri",
+    "emoji": "🍋",
     "ingredients": [
-      "rhum blanc",
-      "jus de citron vert",
-      "sirop de sucre"
+      {
+        "ingredient": "rhum blanc",
+        "amount_ml": 60
+      },
+      {
+        "ingredient": "jus de citron vert",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sirop de sucre",
+        "amount_ml": 15
+      }
     ],
     "sourness": 4,
     "bitterness": 0,
@@ -52,10 +101,20 @@
   },
   {
     "name": "Caipirinha",
+    "emoji": "🇧🇷",
     "ingredients": [
-      "cachaça",
-      "citron vert",
-      "sucre"
+      {
+        "ingredient": "cachaça",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "citron vert",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sucre",
+        "amount_ml": 10
+      }
     ],
     "sourness": 3,
     "bitterness": 1,
@@ -64,11 +123,24 @@
   },
   {
     "name": "Cosmopolitan",
+    "emoji": "💄",
     "ingredients": [
-      "vodka",
-      "triple sec",
-      "jus de cranberry",
-      "jus de citron vert"
+      {
+        "ingredient": "vodka",
+        "amount_ml": 45
+      },
+      {
+        "ingredient": "triple sec",
+        "amount_ml": 15
+      },
+      {
+        "ingredient": "jus de cranberry",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "jus de citron vert",
+        "amount_ml": 15
+      }
     ],
     "sourness": 3,
     "bitterness": 1,
@@ -77,12 +149,28 @@
   },
   {
     "name": "Mai Tai",
+    "emoji": "🌺",
     "ingredients": [
-      "rhum ambré",
-      "rhum blanc",
-      "jus de citron vert",
-      "orgeat",
-      "curaçao orange"
+      {
+        "ingredient": "rhum ambré",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "rhum blanc",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "jus de citron vert",
+        "amount_ml": 20
+      },
+      {
+        "ingredient": "orgeat",
+        "amount_ml": 15
+      },
+      {
+        "ingredient": "curaçao orange",
+        "amount_ml": 15
+      }
     ],
     "sourness": 3,
     "bitterness": 1,
@@ -91,10 +179,20 @@
   },
   {
     "name": "Pina Colada",
+    "emoji": "🍍",
     "ingredients": [
-      "rhum blanc",
-      "jus d'ananas",
-      "crème de coco"
+      {
+        "ingredient": "rhum blanc",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "jus d'ananas",
+        "amount_ml": 60
+      },
+      {
+        "ingredient": "crème de coco",
+        "amount_ml": 40
+      }
     ],
     "sourness": 1,
     "bitterness": 0,
@@ -103,10 +201,20 @@
   },
   {
     "name": "Americano",
+    "emoji": "🇮🇹",
     "ingredients": [
-      "campari",
-      "vermouth rouge",
-      "eau gazeuse"
+      {
+        "ingredient": "campari",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "vermouth rouge",
+        "amount_ml": 30
+      },
+      {
+        "ingredient": "eau gazeuse",
+        "amount_ml": 60
+      }
     ],
     "sourness": 0,
     "bitterness": 4,
@@ -115,10 +223,20 @@
   },
   {
     "name": "Margarita",
+    "emoji": "🌵",
     "ingredients": [
-      "tequila",
-      "triple sec",
-      "jus de citron vert"
+      {
+        "ingredient": "tequila",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "triple sec",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "jus de citron vert",
+        "amount_ml": 20
+      }
     ],
     "sourness": 4,
     "bitterness": 1,
@@ -127,10 +245,20 @@
   },
   {
     "name": "Espresso Martini",
+    "emoji": "☕",
     "ingredients": [
-      "vodka",
-      "liqueur de café",
-      "espresso"
+      {
+        "ingredient": "vodka",
+        "amount_ml": 40
+      },
+      {
+        "ingredient": "liqueur de café",
+        "amount_ml": 20
+      },
+      {
+        "ingredient": "espresso",
+        "amount_ml": 30
+      }
     ],
     "sourness": 0,
     "bitterness": 3,
@@ -139,11 +267,24 @@
   },
   {
     "name": "Tom Collins",
+    "emoji": "🧊",
     "ingredients": [
-      "gin",
-      "jus de citron",
-      "sirop de sucre",
-      "eau gazeuse"
+      {
+        "ingredient": "gin",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "jus de citron",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sirop de sucre",
+        "amount_ml": 15
+      },
+      {
+        "ingredient": "eau gazeuse",
+        "amount_ml": 100
+      }
     ],
     "sourness": 4,
     "bitterness": 0,
@@ -152,13 +293,32 @@
   },
   {
     "name": "Bloody Mary",
+    "emoji": "🍅",
     "ingredients": [
-      "vodka",
-      "jus de tomate",
-      "jus de citron",
-      "tabasco",
-      "sauce Worcestershire",
-      "poivre"
+      {
+        "ingredient": "vodka",
+        "amount_ml": 45
+      },
+      {
+        "ingredient": "jus de tomate",
+        "amount_ml": 90
+      },
+      {
+        "ingredient": "jus de citron",
+        "amount_ml": 15
+      },
+      {
+        "ingredient": "tabasco",
+        "amount_ml": 1
+      },
+      {
+        "ingredient": "sauce Worcestershire",
+        "amount_ml": 3
+      },
+      {
+        "ingredient": "poivre",
+        "amount_ml": 1
+      }
     ],
     "sourness": 2,
     "bitterness": 1,
@@ -167,11 +327,24 @@
   },
   {
     "name": "Virgin Mojito",
+    "emoji": "🧃",
     "ingredients": [
-      "menthe",
-      "citron vert",
-      "sucre",
-      "eau gazeuse"
+      {
+        "ingredient": "menthe",
+        "amount_ml": 10
+      },
+      {
+        "ingredient": "citron vert",
+        "amount_ml": 25
+      },
+      {
+        "ingredient": "sucre",
+        "amount_ml": 10
+      },
+      {
+        "ingredient": "eau gazeuse",
+        "amount_ml": 100
+      }
     ],
     "sourness": 2,
     "bitterness": 0,
@@ -180,10 +353,20 @@
   },
   {
     "name": "Gin Tonic",
+    "emoji": "🍸",
     "ingredients": [
-      "gin",
-      "tonic",
-      "citron ou concombre (optionnel)"
+      {
+        "ingredient": "gin",
+        "amount_ml": 50
+      },
+      {
+        "ingredient": "tonic",
+        "amount_ml": 100
+      },
+      {
+        "ingredient": "citron",
+        "amount_ml": 5
+      }
     ],
     "sourness": 1,
     "bitterness": 3,

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import cocktails from '@/data/cocktails.json'
 import ingredients from '@/data/ingredients.json'
+import { mdiPlus, mdiCircleOutline, mdiCircle, mdiMagnify, mdiEmoticonSad } from '@mdi/js'
 
 // État réactif pour les filtres
 const selectedIngredients = ref([])
@@ -15,48 +16,41 @@ const filteredCocktails = computed(() => {
   return cocktails.filter(cocktail => {
     // Filtre ingrédients
     if (selectedIngredients.value.length > 0) {
-      const hasSelectedIngredients = selectedIngredients.value.every(ingredient => 
-        cocktail.ingredients.some(cocktailIngredient => 
+      const hasSelectedIngredients = selectedIngredients.value.every(ingredient =>
+        cocktail.ingredients.some(cocktailIngredient =>
           cocktailIngredient.toLowerCase().includes(ingredient.toLowerCase())
         )
       )
       if (!hasSelectedIngredients) return false
     }
-    
+
     // Filtre sourness
     if (cocktail.sourness < sournessRange.value[0] || cocktail.sourness > sournessRange.value[1]) {
       return false
     }
-    
+
     // Filtre bitterness
     if (cocktail.bitterness < bitternessRange.value[0] || cocktail.bitterness > bitternessRange.value[1]) {
       return false
     }
-    
+
     // Filtre sweetness
     if (cocktail.sweetness < sweetnessRange.value[0] || cocktail.sweetness > sweetnessRange.value[1]) {
       return false
     }
-    
+
     // Filtre mocktail
     if (onlyMocktails.value && !cocktail.mocktail) {
       return false
     }
-    
+
     return true
   })
 })
 
 // Fonction pour obtenir l'emoji approprié pour chaque cocktail
 const getCocktailEmoji = (cocktail) => {
-  if (cocktail.mocktail) return '🥤'
-  if (cocktail.name.toLowerCase().includes('martini')) return '🍸'
-  if (cocktail.name.toLowerCase().includes('mojito')) return '🌿'
-  if (cocktail.name.toLowerCase().includes('margarita')) return '🍹'
-  if (cocktail.name.toLowerCase().includes('bloody mary')) return '🍅'
-  if (cocktail.name.toLowerCase().includes('pina colada')) return '🥥'
-  if (cocktail.name.toLowerCase().includes('whiskey')) return '🥃'
-  return '🍻'
+  return cocktail.emoji || '🍻'
 }
 
 // Fonction pour obtenir la couleur basée sur les caractéristiques
@@ -82,23 +76,16 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
       <!-- Panneau de filtres avec style glassmorphism -->
       <v-card class="glass-card mb-6" elevation="0">
         <v-card-title class="text-h5 text-center pb-2">
-          🔍 Filtres de recherche
+          <v-icon :icon="mdiMagnify" class="mr-2"></v-icon>
+          Filtres de recherche
         </v-card-title>
-        
+
         <v-card-text>
           <v-row>
             <!-- Sélection d'ingrédients -->
             <v-col cols="12" md="6">
-              <v-select
-                v-model="selectedIngredients"
-                :items="ingredients"
-                label="🧪 Ingrédients"
-                multiple
-                chips
-                closable-chips
-                variant="outlined"
-                class="glass-input"
-              >
+              <v-select hide-details v-model="selectedIngredients" :items="ingredients" label="🧪 Ingrédients" multiple
+                chips closable-chips variant="outlined" class="glass-input">
                 <template v-slot:prepend-item>
                   <v-list-item>
                     <v-list-item-title class="text-caption">
@@ -112,12 +99,8 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 
             <!-- Switch mocktail -->
             <v-col cols="12" md="6" class="d-flex align-center">
-              <v-switch
-                v-model="onlyMocktails"
-                label="🚫 Seulement les mocktails"
-                color="primary"
-                hide-details
-              ></v-switch>
+              <v-switch v-model="onlyMocktails" label="🚫 Seulement les mocktails" color="primary"
+                hide-details></v-switch>
             </v-col>
           </v-row>
 
@@ -128,16 +111,8 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
                 <v-icon class="mr-2">🍋</v-icon>
                 <span class="slider-label">Acidité</span>
               </div>
-              <v-range-slider
-                v-model="sournessRange"
-                :min="0"
-                :max="5"
-                step="1"
-                thumb-label
-                color="yellow-darken-2"
-                track-color="yellow-lighten-4"
-                class="glass-slider"
-              >
+              <v-range-slider v-model="sournessRange" :min="0" :max="5" step="1" thumb-label color="yellow-darken-2"
+                track-color="yellow-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
@@ -150,16 +125,8 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
                 <v-icon class="mr-2">☕</v-icon>
                 <span class="slider-label">Amertume</span>
               </div>
-              <v-range-slider
-                v-model="bitternessRange"
-                :min="0"
-                :max="5"
-                step="1"
-                thumb-label
-                color="brown-darken-2"
-                track-color="brown-lighten-4"
-                class="glass-slider"
-              >
+              <v-range-slider v-model="bitternessRange" :min="0" :max="5" step="1" thumb-label color="brown-darken-2"
+                track-color="brown-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
@@ -172,16 +139,8 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
                 <v-icon class="mr-2">🍯</v-icon>
                 <span class="slider-label">Douceur</span>
               </div>
-              <v-range-slider
-                v-model="sweetnessRange"
-                :min="0"
-                :max="5"
-                step="1"
-                thumb-label
-                color="pink-darken-2"
-                track-color="pink-lighten-4"
-                class="glass-slider"
-              >
+              <v-range-slider v-model="sweetnessRange" :min="0" :max="5" step="1" thumb-label color="pink-darken-2"
+                track-color="pink-lighten-4" class="glass-slider">
                 <template v-slot:thumb-label="{ modelValue }">
                   {{ modelValue }}
                 </template>
@@ -194,48 +153,33 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
       <!-- Résultats -->
       <div class="results-section">
         <h2 class="text-h4 mb-4 text-center">
-          🎯 {{ filteredCocktails.length }} cocktail{{ filteredCocktails.length > 1 ? 's' : '' }} trouvé{{ filteredCocktails.length > 1 ? 's' : '' }}
+          🎯 {{ filteredCocktails.length }} cocktail{{ filteredCocktails.length > 1 ? 's' : '' }} trouvé{{
+            filteredCocktails.length > 1 ? 's' : '' }}
         </h2>
 
         <v-row>
-          <v-col
-            v-for="cocktail in filteredCocktails"
-            :key="cocktail.name"
-            cols="12"
-            sm="6"
-            md="4"
-            lg="3"
-          >
-            <v-card 
-              class="glass-card cocktail-card"
-              elevation="0"
-              :style="{ borderColor: getFlavorColor(cocktail.sourness, cocktail.bitterness, cocktail.sweetness) }"
-            >
+          <v-col v-for="cocktail in filteredCocktails" :key="cocktail.name" cols="12" sm="6" md="4" lg="3">
+            <v-card class="glass-card cocktail-card" elevation="0"
+              :style="{ borderColor: getFlavorColor(cocktail.sourness, cocktail.bitterness, cocktail.sweetness) }">
               <v-card-title class="text-center pb-2">
                 <div class="cocktail-emoji">{{ getCocktailEmoji(cocktail) }}</div>
                 <div class="cocktail-name">{{ cocktail.name }}</div>
-                <v-chip 
-                  v-if="cocktail.mocktail" 
-                  color="success" 
-                  size="small"
-                  class="mt-1"
-                >
+                <v-chip v-if="cocktail.mocktail" color="success" size="small" class="mt-1">
                   🚫 Sans alcool
                 </v-chip>
               </v-card-title>
 
               <v-card-text>
-                <!-- Ingrédients -->
-                <div class="mb-3">
-                  <v-chip
-                    v-for="ingredient in cocktail.ingredients"
-                    :key="ingredient"
-                    size="small"
-                    class="ma-1"
-                    variant="outlined"
-                  >
-                    {{ ingredient }}
-                  </v-chip>
+                <!-- Recette -->
+                <div class="recipe-section mb-3">
+                  <h4 class="recipe-title">📝 Recette</h4>
+                  <div class="ingredients-list">
+                    <div v-for="ingredient in cocktail.ingredients" :key="ingredient.ingredient"
+                      class="ingredient-item">
+                      <span class="ingredient-name">{{ ingredient.ingredient }}</span>
+                      <span class="ingredient-amount">{{ ingredient.amount_ml }}ml</span>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Caractéristiques gustatives -->
@@ -243,40 +187,22 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
                   <div class="flavor-item">
                     <span class="flavor-icon">🍋</span>
                     <span class="flavor-label">Acidité:</span>
-                    <v-rating
-                      :model-value="cocktail.sourness"
-                      readonly
-                      size="small"
-                      color="yellow-darken-2"
-                      empty-icon="mdi-circle-outline"
-                      full-icon="mdi-circle"
-                    ></v-rating>
+                    <v-rating :model-value="cocktail.sourness" readonly size="small" color="yellow-darken-2"
+                      :empty-icon="mdiCircleOutline" :full-icon="mdiCircle"></v-rating>
                   </div>
 
                   <div class="flavor-item">
                     <span class="flavor-icon">☕</span>
                     <span class="flavor-label">Amertume:</span>
-                    <v-rating
-                      :model-value="cocktail.bitterness"
-                      readonly
-                      size="small"
-                      color="brown-darken-2"
-                      empty-icon="mdi-circle-outline"
-                      full-icon="mdi-circle"
-                    ></v-rating>
+                    <v-rating :model-value="cocktail.bitterness" readonly size="small" color="brown-darken-2"
+                      :empty-icon="mdiCircleOutline" :full-icon="mdiCircle"></v-rating>
                   </div>
 
                   <div class="flavor-item">
                     <span class="flavor-icon">🍯</span>
                     <span class="flavor-label">Douceur:</span>
-                    <v-rating
-                      :model-value="cocktail.sweetness"
-                      readonly
-                      size="small"
-                      color="pink-darken-2"
-                      empty-icon="mdi-circle-outline"
-                      full-icon="mdi-circle"
-                    ></v-rating>
+                    <v-rating :model-value="cocktail.sweetness" readonly size="small" color="pink-darken-2"
+                      :empty-icon="mdiCircleOutline" :full-icon="mdiCircle"></v-rating>
                   </div>
                 </div>
               </v-card-text>
@@ -286,7 +212,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 
         <!-- Message si aucun résultat -->
         <div v-if="filteredCocktails.length === 0" class="text-center mt-8">
-          <v-icon size="64" color="grey-lighten-1">😔</v-icon>
+          <v-icon size="64" color="grey-lighten-1" :icon="mdiEmoticonSad"></v-icon>
           <h3 class="text-h5 mt-4 text-grey-darken-1">
             Aucun cocktail ne correspond à vos critères
           </h3>
@@ -329,7 +255,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
   font-size: 3.5rem;
   font-weight: 700;
   color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   margin: 0;
   letter-spacing: 0.05em;
 }
@@ -338,7 +264,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0.5rem 0 0 0;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .glass-card {
@@ -371,7 +297,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
   font-size: 1.2rem;
   font-weight: 600;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .glass-input {
@@ -395,7 +321,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 .slider-label {
   font-weight: 600;
   color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .glass-slider {
@@ -407,6 +333,55 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 
 .flavor-profile {
   margin-top: 1rem;
+}
+
+.recipe-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recipe-title {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.ingredients-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ingredient-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex: 1;
+  text-transform: capitalize;
+}
+
+.ingredient-amount {
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .flavor-item {
@@ -435,7 +410,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 
 .results-section h2 {
   color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: 600;
 }
 
@@ -444,17 +419,17 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
   .app-title {
     font-size: 2.5rem;
   }
-  
+
   .cocktail-emoji {
     font-size: 2.5rem;
   }
-  
+
   .flavor-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
   }
-  
+
   .flavor-label {
     min-width: auto;
   }
@@ -466,6 +441,7 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -501,6 +477,6 @@ const getFlavorColor = (sourness, bitterness, sweetness) => {
 :deep(.v-switch .v-label) {
   color: white !important;
   font-weight: 500;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 </style>
